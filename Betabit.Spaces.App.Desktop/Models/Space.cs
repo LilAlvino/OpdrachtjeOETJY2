@@ -18,5 +18,7 @@ namespace Betabit.Spaces.App.Models
         /// The number of seats or the numer of people the space is typically used for
         /// </summary>
         public int Capacity { get; set; }
+
+        public override string ToString() => $"{Code} - {Description}";
     }
 }

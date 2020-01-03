@@ -1,8 +1,10 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics.CodeAnalysis;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Betabit.Spaces.App.Clients;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Betabit.Spaces.App
 {
@@ -12,12 +14,23 @@ namespace Betabit.Spaces.App
         ///  The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        [ExcludeFromCodeCoverage]
+        static async Task Main()
         {
+            var services = CreateServiceProvider();
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            var form = services.GetService<MainForm>();
+            Application.Run(form);
         }
+
+        public static ServiceProvider CreateServiceProvider()
+            => new ServiceCollection()
+                .AddScoped<MainForm>()
+                .AddSingleton<HttpClient>()
+                .AddSingleton<IReservationsClient, ReservationsClient>()
+                .AddSingleton<ISpacesClient, SpacesClient>()
+                .BuildServiceProvider();
     }
 }

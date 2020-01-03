@@ -39,5 +39,13 @@ namespace Betabit.Spaces.App.Clients
             var response = await client.PutAsync($"http://localhost:7071/api/Reservations", content);
             return response;
         }
+
+        private static readonly JsonSerializerOptions jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+
+        public static async Task<TResponse> DeserializeResponse<TResponse>(this HttpResponseMessage response) 
+            => JsonSerializer.Deserialize<TResponse>(await response.Content.ReadAsStringAsync(), jsonOptions);
+
+        public static async Task<TResponse> DeserializeResponse<TResponse>(this Task<HttpResponseMessage> responseTask) 
+            => await DeserializeResponse<TResponse>(await responseTask);
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Betabit.Spaces.App.Clients
 {
-    public class ReservationsClient
+    public class ReservationsClient : IReservationsClient
     {
         private readonly HttpClient client;
 
